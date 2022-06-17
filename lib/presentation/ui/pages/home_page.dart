@@ -1,33 +1,26 @@
-import 'dart:developer';
-
 import 'package:apod_app/core/utils/app_colors.dart';
 import 'package:apod_app/core/utils/app_routers.dart';
-import 'package:apod_app/core/utils/app_text_styles.dart';
-import 'package:apod_app/core/utils/utils.dart';
 import 'package:apod_app/domain/entities/apod_entity.dart';
 import 'package:apod_app/presentation/controllers/apod_controller.dart';
-import 'package:apod_app/presentation/ui/widgets/rounded_background_component.dart';
+import 'package:apod_app/presentation/ui/widgets/apod_card_widget.dart';
+import 'package:apod_app/presentation/ui/widgets/rounded_background_widget.dart';
+import 'package:apod_app/presentation/ui/widgets/select_date_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final ApodController apodController;
+
+  const HomePage({
+    Key? key,
+    required this.apodController,
+  }) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  late final ApodController _controller;
   late Size _deviceSize;
-  late String dateMessage;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = GetIt.I.get<ApodController>();
-    dateMessage = 'Select a date';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,62 +29,67 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.primaryColor,
-        body: RoundedBackgroundComponent(
-          height: _deviceSize.height * 0.03,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 40),
-                  GestureDetector(
-                    onTap: () {
-                      log('select date');
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 5),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.grey),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Text(dateMessage),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: const [
-                              Icon(Icons.date_range),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  ValueListenableBuilder<ApodEntity?>(
-                    valueListenable: _controller.apod,
-                    builder: (__, apod, _) {
-                      if (apod == null) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
+        body: RefreshIndicator(
+          onRefresh: widget.apodController.initializer,
+          child: RoundedBackgroundWidget(
+            height: _deviceSize.height * 0.03,
+            child: SingleChildScrollView(
+              child: Container(
+                padding:
+                    EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.05),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: _deviceSize.height * 0.05),
+                    ValueListenableBuilder<String>(
+                      valueListenable:
+                          widget.apodController.dateMessageNotifier,
+                      builder: (context, dateMessage, _) {
+                        return SelectDateWidget(
+                          dateMessage: dateMessage,
+                          onTap: () async {
+                            await widget.apodController
+                                .fetchSelectDate(context);
+                          },
                         );
-                      }
+                      },
+                    ),
+                    const SizedBox(height: 40),
+                    ValueListenableBuilder<bool>(
+                      valueListenable: widget.apodController.loadingNotifier,
+                      builder: (__, apod, _) {
+                        List<ApodEntity>? listApod =
+                            widget.apodController.listApod;
 
-                      return ApodCardWidget(
-                        image: apod.hdurl,
-                        title: apod.title,
-                        date: apod.date,
-                        onTap: () => Navigator.pushNamed(
-                            context, apodDetailsRoute,
-                            arguments: ApodDetailsArgs(apodEntity: apod)),
-                      );
-                    },
-                  )
-                ],
+                        if (widget.apodController.loading || listApod == null) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        return ListView.builder(
+                          itemCount: listApod.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (_, int index) {
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 25),
+                              child: ApodCardWidget(
+                                image: listApod[index].url,
+                                title: listApod[index].title,
+                                date: listApod[index].date,
+                                onTap: () => Navigator.pushNamed(
+                                    context, apodDetailsRoute,
+                                    arguments: ApodDetailsArgs(
+                                        apodEntity: listApod[index])),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -100,56 +98,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-class ApodCardWidget extends StatelessWidget {
-  final String image;
-  final String title;
-  final String date;
-
-  final void Function() onTap;
-
-  const ApodCardWidget({
-    Key? key,
-    required this.image,
-    required this.title,
-    required this.date,
-    required this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        elevation: 10,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Image.network(image),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  Text(
-                    title,
-                    style: AppTextStyles.textFieldHeading,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(Utils.formatDate(date)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// pt_BR
