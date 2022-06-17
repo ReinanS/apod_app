@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:apod_app/data/datasources/get_apod_datasource.dart';
 import 'package:apod_app/data/datasources/get_list_apod_datasource.dart';
 import 'package:apod_app/data/exception.dart';
 import 'package:apod_app/data/models/apod_model.dart';
@@ -19,6 +18,11 @@ class GetListApodRemoteDataSourceImp implements GetListApodDatasource {
       String date) async {
     try {
       final response = await client.get(Uri.parse(date));
+
+      if (response.statusCode != 200) {
+        return const Left(ServerFailure('Server failure'));
+      }
+
       Iterable list = json.decode(response.body);
       List<ApodModel> listModel =
           list.map((e) => ApodModel.fromMap(e)).toList();

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:html';
 
 import 'package:apod_app/data/datasources/get_list_apod_datasource.dart';
 import 'package:apod_app/data/datasources/local/get_list_apod_datasource_decorator.dart';
@@ -19,15 +18,15 @@ class GetListApodDataSourceDecoratorImpl
   Future<Either<Failure, List<ApodEntity>>> getListApodRepository(
       String date) async {
     return (await super.getListApodRepository(date)).fold(
-      (error) async => Right(await _getInCache()),
+      (error) async => Right(await getInCache()),
       (sucess) {
-        _saveInCache(sucess);
+        saveInCache(sucess);
         return Right(sucess);
       },
     );
   }
 
-  void _saveInCache(List<ApodEntity> listApodEntity) async {
+  void saveInCache(List<ApodEntity> listApodEntity) async {
     var prefs = await SharedPreferences.getInstance();
     String jsonApods =
         json.encode(listApodEntity.map((a) => a.toJson()).toList());
@@ -36,18 +35,18 @@ class GetListApodDataSourceDecoratorImpl
     log('Saved in cache');
   }
 
-  Future<List<ApodEntity>> _getInCache() async {
+  Future<List<ApodEntity>> getInCache() async {
     var prefs = await SharedPreferences.getInstance();
-    var apodJsonString = prefs.getString('apod_cache');
+    var apodJsonString = prefs.getString('list_apod_cache');
 
     if (apodJsonString == null) {
       throw Exception();
     }
 
-    var jsonApod = json.decode(apodJsonString) as List;
+    Iterable jsonApod = json.decode(apodJsonString) as List;
 
     List<ApodEntity> listApods =
-        jsonApod.map((a) => ApodEntity.fromMap(a)).toList();
+        jsonApod.map((a) => ApodEntity.fromJson(a)).toList();
 
     log('Recovered apod: ');
     return listApods;
