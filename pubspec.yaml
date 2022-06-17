@@ -43,7 +43,7 @@ dependencies:
   rxdart: ^0.27.3
   get_it: ^7.2.0
   shared_preferences: ^2.0.15
-  image_downloader: ^0.30.0
+  image_downloader: ^0.31.0
 
 dev_dependencies:
   flutter_test:
