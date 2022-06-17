@@ -1,11 +1,16 @@
 import 'package:apod_app/core/inject/inject.dart';
 import 'package:apod_app/core/utils/app_routers.dart';
-import 'package:apod_app/presentation/ui/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  Inject.initialize();
+  _initializer();
   runApp(const MyApp());
+}
+
+void _initializer() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  Inject.initialize();
 }
 
 class MyApp extends StatelessWidget {
