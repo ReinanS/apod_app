@@ -1,34 +1,106 @@
 import 'dart:developer';
 
-import 'package:apod_app/core/utils/apis_utils.dart';
+import 'package:apod_app/core/utils/api.dart';
 import 'package:apod_app/domain/entities/apod_entity.dart';
-import 'package:apod_app/domain/use_cases/get_apod_usecase.dart';
-import 'package:flutter/widgets.dart';
+import 'package:apod_app/domain/use_cases/get_list_apod_usecase.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ApodController {
-  final GetApodUseCase _getApodUseCase;
+  final GetListApodUseCase _getListApodUseCase;
 
   final int _apodQtd = 10;
 
-  ApodController(this._getApodUseCase) {
-    fetchApod();
+  ApodController(this._getListApodUseCase) {
+    initializer();
   }
 
-  ValueNotifier<ApodEntity?> apod = ValueNotifier<ApodEntity?>(null);
-  ApodEntity? _cachedApod;
+  Future<void> initializer() async {
+    _dateMessage = 'Select a date';
+    await _fetchRandomApods();
+  }
 
-  void fetchApod() async {
-    var result = await _getApodUseCase.execute(API.REQUEST_APOD());
+  late ValueNotifier<String> dateMessageNotifier = ValueNotifier<String>('');
+
+  ValueNotifier<bool> loadingNotifier = ValueNotifier<bool>(true);
+
+  ValueNotifier<List<ApodEntity>?> listApodNotifier =
+      ValueNotifier<List<ApodEntity>?>(null);
+
+  ValueNotifier<DateTimeRange?> dateTimeNotifier =
+      ValueNotifier<DateTimeRange?>(null);
+
+  set _dateMessage(String message) => dateMessageNotifier.value = message;
+
+  set _loading(bool load) => loadingNotifier.value = load;
+
+  set _listApod(List<ApodEntity> list) => listApodNotifier.value = list;
+
+  set _dateTime(DateTimeRange? dateTimeRange) =>
+      dateTimeNotifier.value = dateTimeRange;
+
+  String get dateMessage => dateMessageNotifier.value;
+  bool get loading => loadingNotifier.value;
+  List<ApodEntity>? get listApod => listApodNotifier.value;
+  DateTimeRange? get dateTimeRange => dateTimeNotifier.value;
+
+  Future<void> _fetchRandomApods() async {
+    _loading = true;
+
+    var result = await _getListApodUseCase
+        .execute(API.REQUEST_APOD_RANDOM_LIST(_apodQtd));
 
     result.fold(
       (error) => debugPrint(error.toString()),
-      (sucess) => apod.value = sucess,
+      (sucess) => _listApod = sucess,
     );
 
-    _cachedApod = apod.value;
+    _loading = false;
   }
 
-  void fetchRandomApods(int count) async {}
+  Future<void> fetchSelectDate(BuildContext context) async {
+    await pickDateRange(context);
+    _fetchDateRangedApods(getFrom(), getUtil());
+  }
 
-  void fetchDateRangedApods(String startDate, String endDate) async {}
+  void _fetchDateRangedApods(String startDate, String endDate) async {
+    log('$startDate : $endDate');
+
+    _loading = true;
+    var result = await _getListApodUseCase
+        .execute(API.REQUEST_APOD_DATE_RANGED_LIST(startDate, endDate));
+
+    result.fold(
+      (error) => debugPrint(error.toString()),
+      (sucess) => _listApod = sucess,
+    );
+
+    _loading = false;
+  }
+
+  Future<void> pickDateRange(BuildContext context) async {
+    final initialDateRange = DateTimeRange(
+      start: DateTime.now(),
+      end: DateTime.now(),
+    );
+    final newDateRange = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(DateTime.now().year - 15),
+      lastDate: DateTime(DateTime.now().year + 5),
+      initialDateRange: dateTimeRange ?? initialDateRange,
+    );
+
+    if (newDateRange == null) return;
+
+    _dateTime = newDateRange;
+    _dateMessage = '${getFrom()} | ${getUtil()}';
+  }
+
+  String getFrom() => dateTimeRange == null
+      ? ' - '
+      : DateFormat('yyyy-MM-dd').format(dateTimeRange!.start);
+
+  String getUtil() => dateTimeRange == null
+      ? 'Select a date'
+      : DateFormat('yyyy-MM-dd').format(dateTimeRange!.end);
 }
