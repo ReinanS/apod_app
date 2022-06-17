@@ -2,20 +2,26 @@
 // in apod_app/test/helpers/mocks/test_helper.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i6;
-import 'dart:convert' as _i12;
-import 'dart:typed_data' as _i13;
+import 'dart:async' as _i7;
+import 'dart:convert' as _i15;
+import 'dart:typed_data' as _i16;
 
-import 'package:apod_app/data/datasources/get_apod_datasource.dart' as _i9;
-import 'package:apod_app/data/failure.dart' as _i7;
-import 'package:apod_app/domain/entities/apod_entity.dart' as _i8;
-import 'package:apod_app/domain/repositories/get_apod_repository.dart' as _i5;
-import 'package:apod_app/domain/use_cases/get_apod_usecase.dart' as _i10;
+import 'package:apod_app/data/datasources/get_list_apod_datasource.dart'
+    as _i10;
+import 'package:apod_app/data/failure.dart' as _i8;
+import 'package:apod_app/domain/entities/apod_entity.dart' as _i9;
+import 'package:apod_app/domain/repositories/get_list_apod_repository.dart'
+    as _i6;
+import 'package:apod_app/domain/use_cases/get_list_apod_usecase.dart' as _i11;
+import 'package:apod_app/presentation/controllers/apod_controller.dart' as _i12;
+import 'package:apod_app/presentation/controllers/apod_details_controller.dart'
+    as _i13;
 import 'package:dartz/dartz.dart' as _i2;
-import 'package:http/src/base_request.dart' as _i14;
-import 'package:http/src/client.dart' as _i11;
-import 'package:http/src/response.dart' as _i3;
-import 'package:http/src/streamed_response.dart' as _i4;
+import 'package:flutter/material.dart' as _i3;
+import 'package:http/src/base_request.dart' as _i17;
+import 'package:http/src/client.dart' as _i14;
+import 'package:http/src/response.dart' as _i4;
+import 'package:http/src/streamed_response.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -30,136 +36,246 @@ import 'package:mockito/mockito.dart' as _i1;
 
 class _FakeEither_0<L, R> extends _i1.Fake implements _i2.Either<L, R> {}
 
-class _FakeResponse_1 extends _i1.Fake implements _i3.Response {}
-
-class _FakeStreamedResponse_2 extends _i1.Fake implements _i4.StreamedResponse {
+class _FakeValueNotifier_1<T> extends _i1.Fake implements _i3.ValueNotifier<T> {
 }
 
-/// A class which mocks [GetApodRepository].
+class _FakeResponse_2 extends _i1.Fake implements _i4.Response {}
+
+class _FakeStreamedResponse_3 extends _i1.Fake implements _i5.StreamedResponse {
+}
+
+/// A class which mocks [GetListApodRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetApodRepository extends _i1.Mock implements _i5.GetApodRepository {
-  MockGetApodRepository() {
+class MockGetListApodRepository extends _i1.Mock
+    implements _i6.GetListApodRepository {
+  MockGetListApodRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.Future<_i2.Either<_i7.Failure, _i8.ApodEntity>> getApodRepository(
-          String? date) =>
-      (super.noSuchMethod(Invocation.method(#getApodRepository, [date]),
-          returnValue: Future<_i2.Either<_i7.Failure, _i8.ApodEntity>>.value(
-              _FakeEither_0<_i7.Failure, _i8.ApodEntity>())) as _i6
-          .Future<_i2.Either<_i7.Failure, _i8.ApodEntity>>);
+  _i7.Future<_i2.Either<_i8.Failure, List<_i9.ApodEntity>>>
+      getListApodRepository(String? date) => (super.noSuchMethod(
+              Invocation.method(#getListApodRepository, [date]),
+              returnValue:
+                  Future<_i2.Either<_i8.Failure, List<_i9.ApodEntity>>>.value(
+                      _FakeEither_0<_i8.Failure, List<_i9.ApodEntity>>()))
+          as _i7.Future<_i2.Either<_i8.Failure, List<_i9.ApodEntity>>>);
 }
 
-/// A class which mocks [GetApodDatasource].
+/// A class which mocks [GetListApodDatasource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetApodDatasource extends _i1.Mock implements _i9.GetApodDatasource {
-  MockGetApodDatasource() {
+class MockGetListApodDatasource extends _i1.Mock
+    implements _i10.GetListApodDatasource {
+  MockGetListApodDatasource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.Future<_i2.Either<_i7.Failure, _i8.ApodEntity>> getApodRepository(
-          String? date) =>
-      (super.noSuchMethod(Invocation.method(#getApodRepository, [date]),
-          returnValue: Future<_i2.Either<_i7.Failure, _i8.ApodEntity>>.value(
-              _FakeEither_0<_i7.Failure, _i8.ApodEntity>())) as _i6
-          .Future<_i2.Either<_i7.Failure, _i8.ApodEntity>>);
+  _i7.Future<_i2.Either<_i8.Failure, List<_i9.ApodEntity>>>
+      getListApodRepository(String? date) => (super.noSuchMethod(
+              Invocation.method(#getListApodRepository, [date]),
+              returnValue:
+                  Future<_i2.Either<_i8.Failure, List<_i9.ApodEntity>>>.value(
+                      _FakeEither_0<_i8.Failure, List<_i9.ApodEntity>>()))
+          as _i7.Future<_i2.Either<_i8.Failure, List<_i9.ApodEntity>>>);
 }
 
-/// A class which mocks [GetApodUseCase].
+/// A class which mocks [GetListApodUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetApodUseCase extends _i1.Mock implements _i10.GetApodUseCase {
-  MockGetApodUseCase() {
+class MockGetListApodUseCase extends _i1.Mock
+    implements _i11.GetListApodUseCase {
+  MockGetListApodUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.Future<_i2.Either<_i7.Failure, _i8.ApodEntity>> execute(String? date) =>
-      (super.noSuchMethod(Invocation.method(#execute, [date]),
-          returnValue: Future<_i2.Either<_i7.Failure, _i8.ApodEntity>>.value(
-              _FakeEither_0<_i7.Failure, _i8.ApodEntity>())) as _i6
-          .Future<_i2.Either<_i7.Failure, _i8.ApodEntity>>);
+  _i7.Future<_i2.Either<_i8.Failure, List<_i9.ApodEntity>>> execute(
+          String? url) =>
+      (super.noSuchMethod(Invocation.method(#execute, [url]),
+              returnValue:
+                  Future<_i2.Either<_i8.Failure, List<_i9.ApodEntity>>>.value(
+                      _FakeEither_0<_i8.Failure, List<_i9.ApodEntity>>()))
+          as _i7.Future<_i2.Either<_i8.Failure, List<_i9.ApodEntity>>>);
+}
+
+/// A class which mocks [ApodController].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockApodController extends _i1.Mock implements _i12.ApodController {
+  MockApodController() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.ValueNotifier<String> get dateMessageNotifier =>
+      (super.noSuchMethod(Invocation.getter(#dateMessageNotifier),
+              returnValue: _FakeValueNotifier_1<String>())
+          as _i3.ValueNotifier<String>);
+  @override
+  set dateMessageNotifier(_i3.ValueNotifier<String>? _dateMessageNotifier) =>
+      super.noSuchMethod(
+          Invocation.setter(#dateMessageNotifier, _dateMessageNotifier),
+          returnValueForMissingStub: null);
+  @override
+  _i3.ValueNotifier<bool> get loadingNotifier => (super.noSuchMethod(
+      Invocation.getter(#loadingNotifier),
+      returnValue: _FakeValueNotifier_1<bool>()) as _i3.ValueNotifier<bool>);
+  @override
+  set loadingNotifier(_i3.ValueNotifier<bool>? _loadingNotifier) =>
+      super.noSuchMethod(Invocation.setter(#loadingNotifier, _loadingNotifier),
+          returnValueForMissingStub: null);
+  @override
+  _i3.ValueNotifier<List<_i9.ApodEntity>?> get listApodNotifier =>
+      (super.noSuchMethod(Invocation.getter(#listApodNotifier),
+              returnValue: _FakeValueNotifier_1<List<_i9.ApodEntity>?>())
+          as _i3.ValueNotifier<List<_i9.ApodEntity>?>);
+  @override
+  set listApodNotifier(
+          _i3.ValueNotifier<List<_i9.ApodEntity>?>? _listApodNotifier) =>
+      super.noSuchMethod(
+          Invocation.setter(#listApodNotifier, _listApodNotifier),
+          returnValueForMissingStub: null);
+  @override
+  _i3.ValueNotifier<_i3.DateTimeRange?> get dateTimeNotifier =>
+      (super.noSuchMethod(Invocation.getter(#dateTimeNotifier),
+              returnValue: _FakeValueNotifier_1<_i3.DateTimeRange?>())
+          as _i3.ValueNotifier<_i3.DateTimeRange?>);
+  @override
+  set dateTimeNotifier(
+          _i3.ValueNotifier<_i3.DateTimeRange?>? _dateTimeNotifier) =>
+      super.noSuchMethod(
+          Invocation.setter(#dateTimeNotifier, _dateTimeNotifier),
+          returnValueForMissingStub: null);
+  @override
+  String get dateMessage =>
+      (super.noSuchMethod(Invocation.getter(#dateMessage), returnValue: '')
+          as String);
+  @override
+  bool get loading =>
+      (super.noSuchMethod(Invocation.getter(#loading), returnValue: false)
+          as bool);
+  @override
+  _i7.Future<void> initializer() =>
+      (super.noSuchMethod(Invocation.method(#initializer, []),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+  @override
+  _i7.Future<void> fetchSelectDate(_i3.BuildContext? context) =>
+      (super.noSuchMethod(Invocation.method(#fetchSelectDate, [context]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+  @override
+  _i7.Future<void> pickDateRange(_i3.BuildContext? context) =>
+      (super.noSuchMethod(Invocation.method(#pickDateRange, [context]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+  @override
+  String getFrom() =>
+      (super.noSuchMethod(Invocation.method(#getFrom, []), returnValue: '')
+          as String);
+  @override
+  String getUtil() =>
+      (super.noSuchMethod(Invocation.method(#getUtil, []), returnValue: '')
+          as String);
+}
+
+/// A class which mocks [ApodDetailsController].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockApodDetailsController extends _i1.Mock
+    implements _i13.ApodDetailsController {
+  MockApodDetailsController() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  void downloadImage(String? url, _i3.BuildContext? context) =>
+      super.noSuchMethod(Invocation.method(#downloadImage, [url, context]),
+          returnValueForMissingStub: null);
+  @override
+  void dowloadToGallery(_i3.BuildContext? context) =>
+      super.noSuchMethod(Invocation.method(#dowloadToGallery, [context]),
+          returnValueForMissingStub: null);
 }
 
 /// A class which mocks [Client].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockHttpClient extends _i1.Mock implements _i11.Client {
+class MockHttpClient extends _i1.Mock implements _i14.Client {
   MockHttpClient() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.Future<_i3.Response> head(Uri? url, {Map<String, String>? headers}) =>
+  _i7.Future<_i4.Response> head(Uri? url, {Map<String, String>? headers}) =>
       (super.noSuchMethod(Invocation.method(#head, [url], {#headers: headers}),
-              returnValue: Future<_i3.Response>.value(_FakeResponse_1()))
-          as _i6.Future<_i3.Response>);
+              returnValue: Future<_i4.Response>.value(_FakeResponse_2()))
+          as _i7.Future<_i4.Response>);
   @override
-  _i6.Future<_i3.Response> get(Uri? url, {Map<String, String>? headers}) =>
+  _i7.Future<_i4.Response> get(Uri? url, {Map<String, String>? headers}) =>
       (super.noSuchMethod(Invocation.method(#get, [url], {#headers: headers}),
-              returnValue: Future<_i3.Response>.value(_FakeResponse_1()))
-          as _i6.Future<_i3.Response>);
+              returnValue: Future<_i4.Response>.value(_FakeResponse_2()))
+          as _i7.Future<_i4.Response>);
   @override
-  _i6.Future<_i3.Response> post(Uri? url,
+  _i7.Future<_i4.Response> post(Uri? url,
           {Map<String, String>? headers,
           Object? body,
-          _i12.Encoding? encoding}) =>
+          _i15.Encoding? encoding}) =>
       (super.noSuchMethod(
               Invocation.method(#post, [url],
                   {#headers: headers, #body: body, #encoding: encoding}),
-              returnValue: Future<_i3.Response>.value(_FakeResponse_1()))
-          as _i6.Future<_i3.Response>);
+              returnValue: Future<_i4.Response>.value(_FakeResponse_2()))
+          as _i7.Future<_i4.Response>);
   @override
-  _i6.Future<_i3.Response> put(Uri? url,
+  _i7.Future<_i4.Response> put(Uri? url,
           {Map<String, String>? headers,
           Object? body,
-          _i12.Encoding? encoding}) =>
+          _i15.Encoding? encoding}) =>
       (super.noSuchMethod(
               Invocation.method(#put, [url],
                   {#headers: headers, #body: body, #encoding: encoding}),
-              returnValue: Future<_i3.Response>.value(_FakeResponse_1()))
-          as _i6.Future<_i3.Response>);
+              returnValue: Future<_i4.Response>.value(_FakeResponse_2()))
+          as _i7.Future<_i4.Response>);
   @override
-  _i6.Future<_i3.Response> patch(Uri? url,
+  _i7.Future<_i4.Response> patch(Uri? url,
           {Map<String, String>? headers,
           Object? body,
-          _i12.Encoding? encoding}) =>
+          _i15.Encoding? encoding}) =>
       (super.noSuchMethod(
               Invocation.method(#patch, [url],
                   {#headers: headers, #body: body, #encoding: encoding}),
-              returnValue: Future<_i3.Response>.value(_FakeResponse_1()))
-          as _i6.Future<_i3.Response>);
+              returnValue: Future<_i4.Response>.value(_FakeResponse_2()))
+          as _i7.Future<_i4.Response>);
   @override
-  _i6.Future<_i3.Response> delete(Uri? url,
+  _i7.Future<_i4.Response> delete(Uri? url,
           {Map<String, String>? headers,
           Object? body,
-          _i12.Encoding? encoding}) =>
+          _i15.Encoding? encoding}) =>
       (super.noSuchMethod(
               Invocation.method(#delete, [url],
                   {#headers: headers, #body: body, #encoding: encoding}),
-              returnValue: Future<_i3.Response>.value(_FakeResponse_1()))
-          as _i6.Future<_i3.Response>);
+              returnValue: Future<_i4.Response>.value(_FakeResponse_2()))
+          as _i7.Future<_i4.Response>);
   @override
-  _i6.Future<String> read(Uri? url, {Map<String, String>? headers}) =>
+  _i7.Future<String> read(Uri? url, {Map<String, String>? headers}) =>
       (super.noSuchMethod(Invocation.method(#read, [url], {#headers: headers}),
-          returnValue: Future<String>.value('')) as _i6.Future<String>);
+          returnValue: Future<String>.value('')) as _i7.Future<String>);
   @override
-  _i6.Future<_i13.Uint8List> readBytes(Uri? url,
+  _i7.Future<_i16.Uint8List> readBytes(Uri? url,
           {Map<String, String>? headers}) =>
       (super.noSuchMethod(
               Invocation.method(#readBytes, [url], {#headers: headers}),
-              returnValue: Future<_i13.Uint8List>.value(_i13.Uint8List(0)))
-          as _i6.Future<_i13.Uint8List>);
+              returnValue: Future<_i16.Uint8List>.value(_i16.Uint8List(0)))
+          as _i7.Future<_i16.Uint8List>);
   @override
-  _i6.Future<_i4.StreamedResponse> send(_i14.BaseRequest? request) =>
+  _i7.Future<_i5.StreamedResponse> send(_i17.BaseRequest? request) =>
       (super.noSuchMethod(Invocation.method(#send, [request]),
               returnValue:
-                  Future<_i4.StreamedResponse>.value(_FakeStreamedResponse_2()))
-          as _i6.Future<_i4.StreamedResponse>);
+                  Future<_i5.StreamedResponse>.value(_FakeStreamedResponse_3()))
+          as _i7.Future<_i5.StreamedResponse>);
   @override
   void close() => super.noSuchMethod(Invocation.method(#close, []),
       returnValueForMissingStub: null);
