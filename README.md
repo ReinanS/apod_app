@@ -23,11 +23,7 @@
 
 ### UI Demonstration
 
-<img src="https://user-images.githubusercontent.com/51024246/174413732-a5763b72-7e40-44f5-bab1-c2342ed67d82.png" height="480px"> 
-<img src="https://user-images.githubusercontent.com/51024246/174413724-3abfecc0-eedb-4764-bc47-09c2df1ed098.png" height="480px"> 
-<img src="https://user-images.githubusercontent.com/51024246/174413721-f8273c36-0b9c-4a6b-8027-88fdb37fd8a5.png" height="480px">
-<img src="https://user-images.githubusercontent.com/51024246/174414244-6369bc3a-d282-4ded-8a1e-52550b3d9051.png" height="480px">
-
+<img src="https://user-images.githubusercontent.com/51024246/174413732-a5763b72-7e40-44f5-bab1-c2342ed67d82.png" height="480px"> <img src="https://user-images.githubusercontent.com/51024246/174413724-3abfecc0-eedb-4764-bc47-09c2df1ed098.png" height="480px"> <img src="https://user-images.githubusercontent.com/51024246/174413721-f8273c36-0b9c-4a6b-8027-88fdb37fd8a5.png" height="480px"> <img src="https://user-images.githubusercontent.com/51024246/174414244-6369bc3a-d282-4ded-8a1e-52550b3d9051.png" height="480px">
 
 <a id="features"></a>
 
