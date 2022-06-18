@@ -7,9 +7,6 @@ import 'package:apod_app/presentation/ui/widgets/custom_image_network_widget.dar
 import 'package:apod_app/presentation/ui/widgets/rounded_background_widget.dart';
 import 'package:flutter/material.dart';
 
-// todo
-// baixar image
-
 class ApodDetailsPage extends StatefulWidget {
   final ApodEntity apodEntity;
   final ApodDetailsController apodDetailsController;
