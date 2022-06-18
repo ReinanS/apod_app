@@ -38,9 +38,6 @@ dependencies:
   equatable: ^2.0.3
   dartz: ^0.10.1
   http: ^0.13.4
-  flutter_bloc: ^8.0.1
-  bloc_test: ^9.0.3
-  rxdart: ^0.27.3
   get_it: ^7.2.0
   shared_preferences: ^2.0.15
   image_downloader: ^0.31.0
